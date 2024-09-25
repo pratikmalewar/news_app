@@ -8,7 +8,7 @@ class HomeLayoutCubit extends Cubit<HomeLayoutStates> {
   HomeLayoutCubit() : super(HomeLayoutInitialState());
 
   // The first time the app will be lounch it will be light
-   /*
+  /*
         Is Dark the default value is false
         cause the cashed variable = null
    */
@@ -18,5 +18,12 @@ class HomeLayoutCubit extends Cubit<HomeLayoutStates> {
     isDark = !isDark;
     SharedData.saveData(key: AppStrings.appTheme, value: isDark);
     emit(ChangeThemeModeState());
+  }
+
+  int currentIndex = 0;
+
+  void changeNavBar({required int index}) {
+    currentIndex = index;
+    emit(ChangeNavbarState());
   }
 }

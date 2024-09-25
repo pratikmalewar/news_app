@@ -7,7 +7,7 @@ class AppRouter {
   Route onGenerateRoute(RouteSettings setting) {
     switch (setting.name) {
       case AppStrings.layout:
-        return MaterialPageRoute(builder: (_) => const HomeLayout());
+        return MaterialPageRoute(builder: (_) =>  HomeLayout());
 
       case AppStrings.secondScreen:
         return MaterialPageRoute(builder: (_) =>  SecondScreen(nameData: '',));
