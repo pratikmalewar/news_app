@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/core/app_router.dart';
+import 'package:news_app/core/app_strings.dart';
 import 'package:news_app/core/bloc_observer.dart';
 import 'package:news_app/core/cache_data.dart';
-import 'package:news_app/screens/home_layout.dart';
-import 'package:news_app/screens/home_layout_cubit/home_layout_cubit.dart';
-import 'package:news_app/screens/home_layout_cubit/home_layout_states.dart';
+import 'package:news_app/screens/home_layout/home_layout.dart';
+import 'package:news_app/screens/home_layout/home_layout_cubit/home_layout_cubit.dart';
+import 'package:news_app/screens/home_layout/home_layout_cubit/home_layout_states.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +35,9 @@ class MyApp extends StatelessWidget {
             themeMode: context
                 .watch<HomeLayoutCubit>()
                 .isDark ? ThemeMode.dark : ThemeMode.light,
-            home: const HomeLayout(),
+            // home: const HomeLayout(),
+            onGenerateRoute: AppRouter().onGenerateRoute,
+            initialRoute: AppStrings.layout,
           );
         },
       ),

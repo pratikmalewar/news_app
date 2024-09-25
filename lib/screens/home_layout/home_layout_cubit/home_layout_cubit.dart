@@ -1,7 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/core/app_strings.dart';
 import 'package:news_app/core/cache_data.dart';
-import 'package:news_app/screens/home_layout_cubit/home_layout_states.dart';
+
+import 'home_layout_states.dart';
 
 class HomeLayoutCubit extends Cubit<HomeLayoutStates> {
   HomeLayoutCubit() : super(HomeLayoutInitialState());
