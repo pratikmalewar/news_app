@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/bloc/news_bloc.dart';
+import 'package:news_app/bloc/news_events.dart';
 import 'package:news_app/core/app_strings.dart';
 import 'package:news_app/core/extension.dart';
 import 'package:news_app/screens/category/category_screen.dart';
-import 'package:news_app/screens/home_screen/home_screen.dart';
 import 'package:news_app/screens/second_screen/second_screen.dart';
+import 'package:news_app/screens/widgets/list_wiget.dart';
 
 import 'home_layout_cubit/home_layout_cubit.dart';
 
@@ -23,7 +25,9 @@ class HomeLayout extends StatelessWidget {
             onPressed: () {
               BlocProvider.of<HomeLayoutCubit>(context).changeThemeMode();
             },
-            icon: Icon(context.watch<HomeLayoutCubit>().isDark
+            icon: Icon(context
+                .watch<HomeLayoutCubit>()
+                .isDark
                 ? Icons.dark_mode_outlined
                 : Icons.light_mode_outlined),
           ),
@@ -38,6 +42,13 @@ class HomeLayout extends StatelessWidget {
           //   },
           //   icon: const Icon(Icons.navigation_rounded),
           // ),
+          IconButton(
+            onPressed: () {
+
+              context.read<NewsBloc>().add(HomeEvents());
+            },
+            icon: const Icon(Icons.add),
+          ),
         ],
       ),
       body: PageView(
@@ -45,17 +56,18 @@ class HomeLayout extends StatelessWidget {
         onPageChanged: (int index) {
           context.read<HomeLayoutCubit>().changeNavBar(index: index);
         },
-        children: [
-          HomeScreen(),
+        children: const [
+          NewsList(),
           CategoryScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: context.watch<HomeLayoutCubit>().currentIndex,
+        currentIndex: context
+            .watch<HomeLayoutCubit>()
+            .currentIndex,
         selectedItemColor: Colors.deepPurple,
         onTap: (int index) {
-
           context.read<HomeLayoutCubit>().changeNavBar(index: index);
           pageController.jumpToPage(index);
         },
