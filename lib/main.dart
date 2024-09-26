@@ -4,6 +4,7 @@ import 'package:news_app/core/app_router.dart';
 import 'package:news_app/core/app_strings.dart';
 import 'package:news_app/core/bloc_observer.dart';
 import 'package:news_app/core/cache_data.dart';
+import 'package:news_app/di.dart';
 import 'package:news_app/screens/home_layout/home_layout.dart';
 import 'package:news_app/screens/home_layout/home_layout_cubit/home_layout_cubit.dart';
 import 'package:news_app/screens/home_layout/home_layout_cubit/home_layout_states.dart';
@@ -13,6 +14,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
  await SharedData.init();
+ await init();
   runApp(const MyApp());
 }
 
