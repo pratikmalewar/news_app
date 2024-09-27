@@ -1,8 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:news_app/data/news_modal.dart';
 
 enum NewsStatus { loading, success, error }
 
-class NewsStates {
+class NewsStates extends Equatable {
   final NewsStatus homeStatus;
   final NewsStatus categoryStatus;
   final List<NewsModal> homeNewsList;
@@ -36,6 +37,17 @@ class NewsStates {
       categoryError: categoryError ?? this.categoryError,
     );
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+        categoryStatus,
+        categoryNewsList,
+        categoryError,
+        homeStatus,
+        homeError,
+        homeNewsList
+      ];
 }
 
 // abstract class NewsState {}

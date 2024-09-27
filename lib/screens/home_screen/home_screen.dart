@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
       buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
         // final news = context.watch<NewsBloc>().news;
-        print(state.homeStatus);
+
         if (state.homeStatus == NewsStatus.loading && state.homeNewsList.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         } else if (state.homeStatus == NewsStatus.error) {

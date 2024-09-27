@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:news_app/core/app_strings.dart';
 
-class NewsModal {
+class NewsModal extends Equatable{
   String? title, author, urlTOImage, publishedAt, description;
 
   NewsModal({
@@ -20,4 +21,14 @@ class NewsModal {
       description: json['description']??'',
     );
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [
+    title,
+    author,
+    urlTOImage,
+    publishedAt,
+    description,
+  ];
 }

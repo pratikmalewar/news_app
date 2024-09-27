@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/core/app_router.dart';
@@ -10,11 +11,13 @@ import 'package:news_app/screens/home_layout/home_layout_cubit/home_layout_cubit
 import 'package:news_app/screens/home_layout/home_layout_cubit/home_layout_states.dart';
 
 
-void main() async{
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
- await SharedData.init();
- await init();
+  await SharedData.init();
+  await init();
+
   runApp(const MyApp());
 }
 
@@ -34,9 +37,9 @@ class MyApp extends StatelessWidget {
             title: 'News App',
             theme: ThemeData.light(),
             darkTheme: ThemeData.dark(),
-            themeMode: context
-                .watch<HomeLayoutCubit>()
-                .isDark ? ThemeMode.dark : ThemeMode.light,
+            themeMode: context.watch<HomeLayoutCubit>().isDark
+                ? ThemeMode.dark
+                : ThemeMode.light,
             // home: const HomeLayout(),
             onGenerateRoute: AppRouter().onGenerateRoute,
             initialRoute: AppStrings.layout,
