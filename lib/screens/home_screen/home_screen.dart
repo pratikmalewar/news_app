@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
             ),
           );
         }
-        return NewsList(news: state.homeNewsList);
+        return SingleChildScrollView(child: NewsList(news: state.homeNewsList),);
       },
     );
   }

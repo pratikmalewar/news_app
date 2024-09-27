@@ -85,7 +85,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                       ),
                     );
                   } else {
-                    return NewsList(news: state.categoryNewsList);
+                    return SingleChildScrollView(child: NewsList(news: state.categoryNewsList));
                   }
                 });
               }).toList(),
