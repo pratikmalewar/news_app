@@ -48,7 +48,7 @@ class HomeLayout extends StatelessWidget {
 
               context.read<NewsBloc>().add(HomeEvents());
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(Icons.refresh),
           ),
         ],
       ),

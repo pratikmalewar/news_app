@@ -64,26 +64,28 @@ class _CategoryScreenState extends State<CategoryScreen>
             child: TabBarView(
               controller: controller,
               children: CategoryList.categoryItems.map((category) {
-                return BlocBuilder<NewsBloc, NewsState>(
+                return BlocBuilder<NewsBloc, NewsStates>(
                     builder: (context, state) {
-                  if (state is CategoryLoadingState) {
+                  if (state.categoryStatus == NewsStatus.loading) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (state is CategorySuccessState) {
-                    return NewsList(news: state.news);
-                  } else if (state is CategoryErrorState) {
+                  }
+                  // else if (state.categoryStatus == NewsStatus.success) {
+                  //   return NewsList(news: state.categoryNewsList);
+                  // }
+                  else if (state.categoryStatus == NewsStatus.error) {
                     return Center(
                       child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                          state.error,
+                          state.categoryError,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                     );
-                  }else{
-                    return const SizedBox();
+                  } else {
+                    return NewsList(news: state.categoryNewsList);
                   }
                 });
               }).toList(),

@@ -10,24 +10,24 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NewsBloc, NewsState>(
+    return BlocBuilder<NewsBloc, NewsStates>(
       builder: (context, state) {
-        final news = context.watch<NewsBloc>().news;
-        if (state is HomeLoadingState) {
+        // final news = context.watch<NewsBloc>().news;
+        if (state.homeStatus == NewsStatus.loading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is HomeErrorState) {
+        } else if (state.homeStatus == NewsStatus.error) {
           return Center(
             child: Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Text(
-                state.error,
+                state.homeError,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
           );
         }
-        return NewsList(news: news);
+        return NewsList(news: state.homeNewsList);
       },
     );
   }

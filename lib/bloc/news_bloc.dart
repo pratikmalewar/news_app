@@ -9,20 +9,22 @@ import 'package:news_app/data/news_repo.dart';
 
 import '../core/api_service/api_consts.dart';
 
-class NewsBloc extends Bloc<NewsEvents, NewsState> {
-  List<NewsModal> news = [];
+class NewsBloc extends Bloc<NewsEvents, NewsStates> {
+  // List<NewsModal> news = [];
   final NewsRepo _newsRepo;
 
-  NewsBloc(this._newsRepo) : super(NewsStatesInitial()) {
+  NewsBloc(this._newsRepo) : super(NewsStates()) {
     on<HomeEvents>((events, emit) async {
-      emit(HomeLoadingState());
+      emit(state.copyWith(homeStatus: NewsStatus.loading));
       final response = await _newsRepo.getHomeData();
 
       response.fold(
-        (left) => emit(HomeErrorState(error: left.message)),
+        (left) => emit(state.copyWith(
+            homeError: left.message, homeStatus: NewsStatus.error)),
         (listOfNews) {
-          news = listOfNews;
-          emit(HomeSuccessState());
+          // news = listOfNews;
+          emit(state.copyWith(
+              homeNewsList: listOfNews, homeStatus: NewsStatus.success));
         },
       );
 
@@ -43,13 +45,19 @@ class NewsBloc extends Bloc<NewsEvents, NewsState> {
     });
 
     on<CategoryEvents>((events, emit) async {
-      emit(CategoryLoadingState());
+      emit(state.copyWith(categoryStatus: NewsStatus.loading));
       final success =
           await _newsRepo.getCategoryData(category: events.category);
 
       success.fold(
-        (l) => emit(CategoryErrorState(error: l.message)),
-        (r) => emit(CategorySuccessState(news: r)),
+        (left) => emit(
+          state.copyWith(
+              categoryError: left.message, categoryStatus: NewsStatus.error),
+        ),
+        (listOfNews) => emit(
+          state.copyWith(
+              categoryNewsList: listOfNews, categoryStatus: NewsStatus.success),
+        ),
       );
     });
   }
