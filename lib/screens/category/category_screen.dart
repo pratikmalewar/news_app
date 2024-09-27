@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/bloc/news_bloc.dart';
+import 'package:news_app/bloc/news_events.dart';
+import 'package:news_app/bloc/news_states.dart';
 import 'package:news_app/core/category_list.dart';
+import 'package:news_app/screens/widgets/list_wiget.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
@@ -17,6 +22,9 @@ class _CategoryScreenState extends State<CategoryScreen>
     // TODO: implement initState
     controller =
         TabController(length: CategoryList.categoryItems.length, vsync: this);
+    print('this is when i am entering the screen for first time');
+    BlocProvider.of<NewsBloc>(context)
+        .add(CategoryEvents(category: CategoryList.categoryItems[0]));
     super.initState();
   }
 
@@ -26,13 +34,16 @@ class _CategoryScreenState extends State<CategoryScreen>
       body: Column(
         children: [
           Container(
-            color: Colors.purple,
+            color: Colors.red,
             child: TabBar(
               controller: controller,
               isScrollable: true,
               indicatorSize: TabBarIndicatorSize.tab,
               indicatorWeight: 5,
-              onTap: (index) {},
+              onTap: (index) {
+                BlocProvider.of<NewsBloc>(context).add(CategoryEvents(
+                    category: CategoryList.categoryItems[index]));
+              },
               unselectedLabelStyle: TextStyle(
                 fontSize: 13.0,
                 color: Colors.black.withOpacity(.5),
@@ -52,9 +63,30 @@ class _CategoryScreenState extends State<CategoryScreen>
           Expanded(
             child: TabBarView(
               controller: controller,
-              children: CategoryList.categoryItems
-                  .map((category) => Text(category))
-                  .toList(),
+              children: CategoryList.categoryItems.map((category) {
+                return BlocBuilder<NewsBloc, NewsState>(
+                    builder: (context, state) {
+                  if (state is CategoryLoadingState) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is CategorySuccessState) {
+                    return NewsList(news: state.news);
+                  } else if (state is CategoryErrorState) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          state.error,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    );
+                  }else{
+                    return const SizedBox();
+                  }
+                });
+              }).toList(),
             ),
           )
         ],

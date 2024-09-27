@@ -6,6 +6,7 @@ import 'package:news_app/core/app_strings.dart';
 import 'package:news_app/core/extension.dart';
 import 'package:news_app/screens/category/category_screen.dart';
 import 'package:news_app/screens/second_screen/second_screen.dart';
+import 'package:news_app/screens/home_screen/home_screen.dart';
 import 'package:news_app/screens/widgets/list_wiget.dart';
 
 import 'home_layout_cubit/home_layout_cubit.dart';
@@ -57,7 +58,7 @@ class HomeLayout extends StatelessWidget {
           context.read<HomeLayoutCubit>().changeNavBar(index: index);
         },
         children: const [
-          NewsList(),
+          HomeScreen(),
           CategoryScreen(),
         ],
       ),

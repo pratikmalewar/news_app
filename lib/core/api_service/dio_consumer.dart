@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:news_app/core/api_service/api_consts.dart';
 import 'package:news_app/core/api_service/api_consumer.dart';
 import 'package:news_app/core/api_service/app_interceptors.dart';
+import 'package:news_app/core/exception.dart';
 
 class DioConsumer implements ApiConsumer {
   late final Dio _dio;
@@ -34,10 +35,10 @@ class DioConsumer implements ApiConsumer {
       if(response.statusCode == 200 || response.statusCode ==201){
         return response.data;
       }else{
-        throw Exception();
+        throw ServerException(response.data['message']);
       }
     } on DioException catch (error){
-      throw Exception(error.response!.data['message']);
+      throw ServerException(error.response!.data['message']);
     }
   }
 
