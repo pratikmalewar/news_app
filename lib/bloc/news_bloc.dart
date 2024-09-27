@@ -12,19 +12,27 @@ import '../core/api_service/api_consts.dart';
 class NewsBloc extends Bloc<NewsEvents, NewsStates> {
   // List<NewsModal> news = [];
   final NewsRepo _newsRepo;
+  int page = 1;
+  int categoryPage = 1;
 
   NewsBloc(this._newsRepo) : super(NewsStates()) {
     on<HomeEvents>((events, emit) async {
       emit(state.copyWith(homeStatus: NewsStatus.loading));
-      final response = await _newsRepo.getHomeData();
+      final response = await _newsRepo.getHomeData(page: page++);
 
       response.fold(
         (left) => emit(state.copyWith(
             homeError: left.message, homeStatus: NewsStatus.error)),
-        (listOfNews) {
-          // news = listOfNews;
-          emit(state.copyWith(
-              homeNewsList: listOfNews, homeStatus: NewsStatus.success));
+        (homeNews) {
+          // state .homeNews is []
+          // [] => homeNews
+          // homeNews will add another of homeNews list from the next page
+          homeNews.isEmpty
+              ? emit(state.copyWith(homeStatus: NewsStatus.success))
+              : emit(state.copyWith(
+            homeNewsList: List.of(state.homeNewsList)..addAll(homeNews),
+            homeStatus: NewsStatus.success,
+          ));
         },
       );
 
@@ -47,17 +55,22 @@ class NewsBloc extends Bloc<NewsEvents, NewsStates> {
     on<CategoryEvents>((events, emit) async {
       emit(state.copyWith(categoryStatus: NewsStatus.loading));
       final success =
-          await _newsRepo.getCategoryData(category: events.category);
+          await _newsRepo.getCategoryData(category: events.category,page: categoryPage++);
 
       success.fold(
         (left) => emit(
           state.copyWith(
               categoryError: left.message, categoryStatus: NewsStatus.error),
         ),
-        (listOfNews) => emit(
-          state.copyWith(
-              categoryNewsList: listOfNews, categoryStatus: NewsStatus.success),
-        ),
+        (categoryNews) {
+          categoryNews.isEmpty
+              ? emit(state.copyWith(categoryStatus: NewsStatus.success))
+              : emit(state.copyWith(
+                  categoryNewsList: List.of(state.categoryNewsList)
+                    ..addAll(categoryNews),
+                  categoryStatus: NewsStatus.success,
+                ));
+        },
       );
     });
   }

@@ -43,6 +43,9 @@ class _CategoryScreenState extends State<CategoryScreen>
               onTap: (index) {
                 BlocProvider.of<NewsBloc>(context).add(CategoryEvents(
                     category: CategoryList.categoryItems[index]));
+                BlocProvider.of<NewsBloc>(context).state.categoryNewsList.clear();
+                BlocProvider.of<NewsBloc>(context).categoryPage = 1;
+
               },
               unselectedLabelStyle: TextStyle(
                 fontSize: 13.0,
@@ -66,7 +69,7 @@ class _CategoryScreenState extends State<CategoryScreen>
               children: CategoryList.categoryItems.map((category) {
                 return BlocBuilder<NewsBloc, NewsStates>(
                     builder: (context, state) {
-                  if (state.categoryStatus == NewsStatus.loading) {
+                  if (state.categoryStatus == NewsStatus.loading && state.categoryNewsList.isEmpty) {
                     return const Center(child: CircularProgressIndicator());
                   }
                   // else if (state.categoryStatus == NewsStatus.success) {
@@ -85,7 +88,12 @@ class _CategoryScreenState extends State<CategoryScreen>
                       ),
                     );
                   } else {
-                    return SingleChildScrollView(child: NewsList(news: state.categoryNewsList));
+                    return NewsList(
+                      news: state.categoryNewsList,
+                      loadMore: () {
+                        BlocProvider.of<NewsBloc>(context).add(CategoryEvents(category: category));
+                      },
+                    );
                   }
                 });
               }).toList(),
