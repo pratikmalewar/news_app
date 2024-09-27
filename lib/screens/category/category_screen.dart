@@ -46,6 +46,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                 BlocProvider.of<NewsBloc>(context).state.categoryNewsList.clear();
                 BlocProvider.of<NewsBloc>(context).categoryPage = 1;
 
+
               },
               unselectedLabelStyle: TextStyle(
                 fontSize: 13.0,
