@@ -17,6 +17,7 @@ void main() async {
   Bloc.observer = MyBlocObserver();
   await SharedData.init();
   await init();
+  // await SharedData.clearData();
 
   runApp(const MyApp());
 }

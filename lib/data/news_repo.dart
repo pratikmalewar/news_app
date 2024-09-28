@@ -1,43 +1,55 @@
 import 'package:dartz/dartz.dart';
-import 'package:news_app/core/api_service/api_consts.dart';
-import 'package:news_app/core/api_service/api_consumer.dart';
 import 'package:news_app/core/exception.dart';
+import 'package:news_app/data/data_source/local_data_source.dart';
+import 'package:news_app/data/data_source/remote_data_source.dart';
 import 'package:news_app/data/news_modal.dart';
 
+
 class NewsRepo {
-  final ApiConsumer _apiConsumer;
+  final LocalDataSource _localDataSource;
+  final RemoteDataSource _remoteDataSource;
 
-  NewsRepo(this._apiConsumer);
+  NewsRepo(this._localDataSource, this._remoteDataSource);
 
-  Future<Either<Failure, List<NewsModal>>> getHomeData(
-  { int? page}
-      ) async {
+  Future<Either<Failure, List<NewsModal>>> getHomeData({int? page}) async {
     try {
-      final response = await _apiConsumer.get(ApiConstants.headlineEndPoint,
-          queryParameters: ApiConstants.query(page: page??1));
-      final List<NewsModal> news = response['articles']
-          .map<NewsModal>((articles) => NewsModal.fromJson(articles))
-          .toList();
-
-      return Right(news);
+      final homeNews = await _localDataSource.getHomeNews();
+      print("HomeNews => ${homeNews.length}");
+      if (homeNews.isNotEmpty && page == 1) {
+        return Right(homeNews);
+      } else {
+        final remoteHomeNews = await _remoteDataSource.getHomeData(page: page);
+        if (page == 1) {
+          _localDataSource.saveHomeNews(remoteHomeNews);
+        }
+        return Right(remoteHomeNews);
+      }
     } on ServerException catch (e) {
-     return left(ServerFailure(e.message.toString()));
+      print("there is an erro here check it ${e.toString()}");
+      return Left(ServerFailure(e.message.toString()));
     }
   }
 
-  Future<Either<Failure, List<NewsModal>>>  getCategoryData({required String category,  int? page}) async {
+  Future<Either<Failure, List<NewsModal>>> getCategoryData({
+    required String category,
+    int? page,
+  }) async {
     try {
+      final categoryNews = await _localDataSource.getCategoryData(category);
+      if (categoryNews.isNotEmpty && page == 1) {
+        return Right(categoryNews);
+      } else {
+        print("mostafamahmoudaboads => ${categoryNews.length} => $page");
+        final remoteCategoryNews = await _remoteDataSource.getCategoryData(
+            page: page, category: category);
+        if (page == 1) {
+          _localDataSource.saveCategoryNews(remoteCategoryNews, category);
+        }
 
-      final response = await _apiConsumer.get(ApiConstants.headlineEndPoint,
-        queryParameters: ApiConstants.query(category: category,page: page ??1));
-    final List<NewsModal> news = response['articles']
-        .map<NewsModal>((articles) => NewsModal.fromJson(articles))
-        .toList();
-
-      return Right(news);
+        return Right(remoteCategoryNews);
+      }
     } on ServerException catch (e) {
-     return left(ServerFailure(e.message.toString()));
+      return Left(ServerFailure(e.message.toString()));
     }
-
   }
 }

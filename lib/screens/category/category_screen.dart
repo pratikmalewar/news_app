@@ -36,10 +36,13 @@ class _CategoryScreenState extends State<CategoryScreen>
           Container(
             color: Colors.red,
             child: TabBar(
+              dividerColor: Colors.black,
               controller: controller,
               isScrollable: true,
               indicatorSize: TabBarIndicatorSize.tab,
               indicatorWeight: 5,
+              tabAlignment: TabAlignment.start,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               onTap: (index) {
                 BlocProvider.of<NewsBloc>(context).add(CategoryEvents(
                     category: CategoryList.categoryItems[index]));

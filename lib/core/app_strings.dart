@@ -9,8 +9,12 @@ class AppStrings{
   static const secondScreen = "/secondScreen";
 
   //App Strings
-  static const defaultIMage = "https://thumbs.dreamstime.com/b/news-newspapers-folded-stacked-word-wooden-block-puzzle-dice-concept-newspaper-media-press-release-42301371.jpg";
-  static const home = "Home";
-  static const category = "Category";
+  static const String defaultIMage = "https://thumbs.dreamstime.com/b/news-newspapers-folded-stacked-word-wooden-block-puzzle-dice-concept-newspaper-media-press-release-42301371.jpg";
+  static const String home = "Home";
+  static const String category = "Category";
+
+  ///Key
+  static const String cacheHome = "cacheHome";
+  static const String cacheCategory= "cacheCategory";
 
 }

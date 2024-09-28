@@ -27,4 +27,9 @@ class SharedData {
   static dynamic getData({required String key}){
     return _sharedPreferences!.get(key);
   }
+
+  static dynamic clearData()async{
+    return _sharedPreferences!.clear();
+  }
+
 }
